@@ -1,26 +1,31 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 222 47% 11%; /* hsl(222, 47%, 11%) - slate-900 */
+    --background-alt: 222 39% 16%; /* hsl(222, 39%, 16%) - slate-800 */
+    
+    --foreground: 215 20% 65%; /* hsl(215, 20%, 65%) - slate-400 */
+    --foreground-strong: 210 40% 96%; /* hsl(210, 40%, 96%) - slate-200 */
+    
+    --primary: 243 89% 62%; /* hsl(243, 89%, 62%) - indigo-600 */
+    --accent: 25 95% 53%;   /* hsl(25, 95%, 53%) - orange-500 */
+    --success: 80 75% 41%;  /* hsl(80, 75%, 41%) - lime-500 */
+    --danger: 0 84% 60%;   /* hsl(0, 84%, 60%) - red-500 */
+
+    --radius: 0.75rem; /* Variable para el redondeo de bordes */
   }
 }
 
+/* 2. Aplicamos las variables base al body */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Usamos `hsl(var(...))` para construir el color.
+     Esto es necesario para que las utilidades de opacidad de Tailwind (ej. bg-background/80) funcionen. */
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  @apply antialiased;
 }
+
