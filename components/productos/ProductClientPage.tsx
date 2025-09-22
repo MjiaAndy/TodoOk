@@ -103,7 +103,7 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
         </Dialog>
       </div>
 
-      <Card>
+      <Card isHoverable>
         <CardHeader>
           <CardTitle>Inventario Actual</CardTitle>
           <CardDescription>Lista de todos los productos registrados.</CardDescription>

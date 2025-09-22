@@ -2,19 +2,19 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { ClientSchema } from '@/lib/schemas'
-const db = require('../../../lib/db');
+const db = require('@/lib/db');
+import { getClientesFromDB } from '@/lib/data';
 
-// GET /api/clientes
 export async function GET() {
   try {
-    const { rows } = await db.query('SELECT * FROM clientes ORDER BY nombre ASC');
-    return NextResponse.json(rows);
+    const clientes = await getClientesFromDB();
+    return NextResponse.json(clientes);
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("ERROR EN API /api/clientes (GET):", err);
+    return NextResponse.json({ error: 'Error al obtener los clientes: ' + err.message }, { status: 500 });
   }
 }
 
-// POST /api/clientes validado
 export async function POST(request: Request) {
   try {
     const body = await request.json();

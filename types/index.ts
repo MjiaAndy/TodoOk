@@ -1,14 +1,13 @@
-// Define la estructura de un Producto en toda la aplicación.
+
 export interface Producto {
   id: number;
   nombre: string;
   precio: number;
   stock: number;
-  categoria?: string; // Opcional por ahora
-  garantia?: string;  // Opcional por ahora
+  categoria?: string; 
+  garantia?: string;  
 }
 
-// Define la estructura de un Cliente.
 export interface Cliente {
   id: number;
   nombre: string;
@@ -18,22 +17,25 @@ export interface Cliente {
   condicion_iva?: string;
 }
 
-// Representa un ítem dentro de una factura.
 export interface ItemFactura extends Producto {
   cantidad: number;
 }
 
-// Define la estructura principal de una Factura.
 export interface Factura {
   id: number;
   cliente_id: number;
+  cliente_nombre: string;
   total: number;
   impuesto: number;
   descuento: number;
+  estado: 'Pagada' | 'Pendiente';
   fecha: string;
 }
 
-// ✅ NUEVO: Define la forma de los datos de estadísticas del dashboard
+export interface InvoiceHistoryClientPageProps {
+  initialInvoices: Factura[];
+}
+
 export interface DashboardStats {
   ventasMes: { actual: number; anterior: number };
   nuevosClientes: { actual: number; anterior: number };
@@ -41,10 +43,47 @@ export interface DashboardStats {
   productosActivos: { actual: number; anterior: number };
 }
 
-// ✅ NUEVO: Define la forma de una factura reciente para el dashboard
-export interface RecentInvoice {
-  id: number;
-  cliente: string;
-  total: number;
-  estado: 'Pagada' | 'Pendiente';
+export interface BentoGridProps {
+  stats: DashboardStats;
+  initialInvoices: Factura[];
 }
+
+// export interface RecentInvoice {
+//   id: number;
+//   cliente: string;
+//   total: number;
+// }
+
+
+export type KpiChangeData = {
+  texto: string;
+  status: 'increase' | 'decrease' | 'neutral';
+};
+
+export interface KpiChangeIndicatorProps {
+  changeData: KpiChangeData;
+}
+
+export interface FullInvoiceData {
+  factura: Factura;
+  cliente: Cliente;
+  items: ItemFactura[];
+}
+
+export type ChatMessageSender = 'user' | 'bot';
+export interface ChatMessage {
+  id: number;
+  sender: ChatMessageSender;
+  content: React.ReactNode;
+}
+export type ChatState =
+  | 'GREETING'
+  | 'SELECTING_CLIENT'
+  | 'ADDING_PRODUCTS'
+  | 'ASKING_DISCOUNT'      
+  | 'ENTERING_DISCOUNT'    
+  | 'SELECTING_PAYMENT'  
+  | 'SELECTING_INSTALLMENTS' 
+  | 'REVIEWING_INVOICE'
+  | 'FINALIZED';
+

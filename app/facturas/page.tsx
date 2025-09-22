@@ -1,23 +1,30 @@
-// app/(rutas)/historial-facturas/page.tsx
-import { Factura } from '@/types';
-import { InvoiceHistoryClientPage } from '@/components/historial/InvoiceHistoryClientPage';
+// app/(rutas)/facturas/page.tsx
+import { ChatInterface } from "@/components/chat/ChatInterface";
+import { Producto, Cliente } from '@/types';
 
-interface FacturaConCliente extends Factura {
-  cliente_nombre: string;
-}
-
-async function getFacturas(): Promise<FacturaConCliente[]> {
+// Obtenemos los datos necesarios en el servidor
+async function getInitialData(): Promise<{ productos: Producto[]; clientes: Cliente[] }> {
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/facturas`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Failed to fetch facturas');
-    return res.json();
+    const [productosRes, clientesRes] = await Promise.all([
+      fetch(`${process.env.NEXTAUTH_URL}/api/productos`, { cache: 'no-store' }),
+      fetch(`${process.env.NEXTAUTH_URL}/api/clientes`, { cache: 'no-store' })
+    ]);
+    if (!productosRes.ok || !clientesRes.ok) throw new Error('Failed to fetch initial data');
+    const productos = await productosRes.json();
+    const clientes = await clientesRes.json();
+    return { productos, clientes };
   } catch (error) {
     console.error(error);
-    return [];
+    return { productos: [], clientes: [] };
   }
 }
 
-export default async function HistorialFacturasPage() {
-  const initialInvoices = await getFacturas();
-  return <InvoiceHistoryClientPage initialInvoices={initialInvoices} />;
+export default async function CrearFacturaPage() {
+  const { productos, clientes } = await getInitialData();
+
+  return (
+    <div className="h-full">
+      <ChatInterface initialClientes={clientes} initialProductos={productos} />
+    </div>
+  );
 }

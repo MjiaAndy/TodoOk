@@ -2,7 +2,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { InvoiceSchema } from '@/lib/schemas';
-const db = require('../../../lib/db');
+const db = require('@/lib/db');
+import { getFacturasFromDB } from '@/lib/data';
 
 // GET /api/facturas - Obtener historial con nombre de cliente
 export async function GET() {
@@ -19,14 +20,13 @@ export async function GET() {
       LEFT JOIN clientes c ON f.cliente_id = c.id
       ORDER BY f.fecha DESC;
     `;
-    const { rows } = await db.query(query);
-    return NextResponse.json(rows);
+    const facturas = await getFacturasFromDB();
+    return NextResponse.json(facturas);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// POST /api/facturas - Lógica mejorada con tabla de detalle
 export async function POST(request: Request) {
   const client = await db.getClient();
 
@@ -34,46 +34,34 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validatedData = InvoiceSchema.parse(body);
     const { cliente_id, productos_vendidos, impuesto, descuento } = validatedData;
-    
     await client.query('BEGIN');
-    
     let subtotal = 0;
-    // Array para guardar los datos enriquecidos de la DB
     const productosDetallados = []; 
-
-    // ✅ ÚNICO BUCLE: Obtenemos toda la info de la DB en una sola pasada
-    for (const producto of productos_vendidos) {
-      const productoResult = await client.query('SELECT precio, stock FROM productos WHERE id = $1 FOR UPDATE', [producto.id]);
-      const productoDB = productoResult.rows[0];
-      
-      if (!productoDB || productoDB.stock < producto.cantidad) {
-        throw new Error(`Stock insuficiente para el producto con ID ${producto.id}`);
-      }
-      
-      const precioUnitario = parseFloat(productoDB.precio);
-      subtotal += (precioUnitario * producto.cantidad);
-      
-      // Guardamos la info verificada para usarla después
-      productosDetallados.push({
-        ...producto,
-        precio_unitario: precioUnitario,
-      });
-    }
-    
-    // Calculamos los totales finales con el subtotal ya verificado
     const montoDescuento = subtotal * (descuento / 100);
     const baseImponible = subtotal - montoDescuento;
     const montoIVA = baseImponible * (impuesto / 100);
     const totalFinal = baseImponible + montoIVA;
-
-    // Insertamos la factura principal y obtenemos su nuevo ID
     const facturaResult = await client.query(
       'INSERT INTO facturas (cliente_id, total, impuesto, descuento) VALUES ($1, $2, $3, $4) RETURNING id',
       [cliente_id, totalFinal, impuesto, descuento]
     );
     const nuevaFacturaId = facturaResult.rows[0].id;
 
-    // ✅ SEGUNDO BUCLE MÁS RÁPIDO: Iteramos sobre los datos que ya tenemos en memoria, SIN consultar la DB de nuevo.
+    for (const producto of productos_vendidos) {
+      const productoResult = await client.query('SELECT precio, stock FROM productos WHERE id = $1 FOR UPDATE', [producto.id]);
+      const productoDB = productoResult.rows[0];
+      if (!productoDB || productoDB.stock < producto.cantidad) {
+        throw new Error(`Stock insuficiente para el producto con ID ${producto.id}`);
+      }
+      const precioUnitario = parseFloat(productoDB.precio);
+      subtotal += (precioUnitario * producto.cantidad);
+
+      productosDetallados.push({
+        ...producto,
+        precio_unitario: precioUnitario,
+      });
+    }
+    
     for (const producto of productosDetallados) {
       await client.query(
         'INSERT INTO factura_items (factura_id, producto_id, cantidad, precio_unitario) VALUES ($1, $2, $3, $4)',

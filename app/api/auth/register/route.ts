@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import { RegisterSchema } from '@/lib/schemas'; // Importamos el esquema
-const db = require('../../../../lib/db');
+const db = require('@/lib/db');
 
 export async function POST(request: Request) {
   try {

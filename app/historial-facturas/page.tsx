@@ -1,22 +1,7 @@
-import { Factura } from '@/types';
 import { InvoiceHistoryClientPage } from '@/components/historial/InvoiceHistoryClientPage';
-
-interface FacturaConCliente extends Factura {
-  cliente_nombre: string;
-}
-
-async function getFacturas(): Promise<FacturaConCliente[]> {
-  try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/facturas`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Failed to fetch facturas');
-    return res.json();
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
+import { getFacturasFromDB } from '@/lib/data';
 
 export default async function HistorialFacturasPage() {
-  const initialInvoices = await getFacturas();
+  const initialInvoices = await getFacturasFromDB();
   return <InvoiceHistoryClientPage initialInvoices={initialInvoices} />;
 }

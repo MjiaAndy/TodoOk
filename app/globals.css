@@ -16,14 +16,11 @@
     --success: 80 75% 41%;  /* hsl(80, 75%, 41%) - lime-500 */
     --danger: 0 84% 60%;   /* hsl(0, 84%, 60%) - red-500 */
 
-    --radius: 0.75rem; /* Variable para el redondeo de bordes */
+    --radius: 0.75rem; 
   }
 }
 
-/* 2. Aplicamos las variables base al body */
 body {
-  /* Usamos `hsl(var(...))` para construir el color.
-     Esto es necesario para que las utilidades de opacidad de Tailwind (ej. bg-background/80) funcionen. */
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   @apply antialiased;

@@ -88,7 +88,7 @@ export function ClientClientPage({ initialClients }: ClientClientPageProps) {
         </Dialog>
       </div>
 
-      <Card>
+      <Card isHoverable>
         <CardHeader>
           <CardTitle>Lista de Clientes</CardTitle>
           <CardDescription>Clientes registrados en el sistema.</CardDescription>

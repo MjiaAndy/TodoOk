@@ -1,10 +1,10 @@
 // components/shared/Sidebar.tsx
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, FileText, History, Users, Package } from 'lucide-react';
+import { UserProfile } from './UserProfile';
 
 // 1. Definimos nuestros enlaces de navegación en un array para que sea fácil de mantener
 const navLinks = [
@@ -19,7 +19,7 @@ export function Sidebar() {
   const pathname = usePathname(); // Hook para saber en qué URL estamos
 
   return (
-    <aside className="hidden md:flex flex-col w-64 bg-background-alt border-r border-slate-700">
+    <aside className="hidden md:flex flex-col w-64 bg-background-alt/60 backdrop-blur-lg border-r border-white/10">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-primary">TodoOk</h1>
       </div>
@@ -35,7 +35,7 @@ export function Sidebar() {
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-foreground-alt transition-all hover:text-foreground',
                     // 3. Aplicamos un estilo diferente si el enlace está activo
-                    isActive && 'bg-primary text-white hover:text-white'
+                    isActive && 'bg-primary/80 text-white hover:text-white'
                   )}
                 >
                   <link.icon className="h-4 w-4" />
@@ -46,9 +46,8 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-      <div className="p-4 border-t border-slate-700">
-        {/* Aquí podría ir la información del usuario logueado en el futuro */}
-        <p className="text-sm text-foreground-alt">Usuario Logueado</p>
+      <div className="p-4 border-t border-white/10">
+        <UserProfile />
       </div>
     </aside>
   );

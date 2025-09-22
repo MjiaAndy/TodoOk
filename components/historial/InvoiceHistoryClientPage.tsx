@@ -4,23 +4,14 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { json2csv } from 'json-2-csv'
-import { Factura } from '@/types'; // Asegúrate de que tu tipo Factura pueda incluir `cliente_nombre`
+import { Factura, InvoiceHistoryClientPageProps } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
 import { Download, Loader2 } from 'lucide-react';
 
-// Extiende la interfaz Factura para el frontend
-interface FacturaConCliente extends Factura {
-  cliente_nombre: string;
-}
-
-interface InvoiceHistoryClientPageProps {
-  initialInvoices: FacturaConCliente[];
-}
-
 export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClientPageProps) {
-  const [facturas, setFacturas] = useState<FacturaConCliente[]>(initialInvoices);
+  const [facturas, setFacturas] = useState<Factura[]>(initialInvoices);
   const [isExporting, setIsExporting] = useState(false);
 
   const exportarAExcel = async () => {
@@ -68,7 +59,7 @@ export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClie
           {isExporting ? 'Exportando...' : 'Exportar (CSV)'}
         </Button>
       </div>
-      <Card>
+      <Card isHoverable>
         <CardHeader>
           <CardTitle>Facturas Emitidas</CardTitle>
           <CardDescription>Lista de todas las facturas generadas.</CardDescription>
