@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "npm run migrate up && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "migrate": "node-pg-migrate -r dotenv/config",
