@@ -1,75 +1,54 @@
-// components/ui/Dialog.tsx
+// components/ui/Dialog.tsx - VERSIÓN FINAL Y LIMPIA
 'use client';
 
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
-
-const DialogPortal = ({ ...props }: DialogPrimitive.DialogPortalProps) => (
-  <DialogPrimitive.Portal {...props} />
-);
-DialogPortal.displayName = DialogPrimitive.Portal.displayName;
-
+const DialogPortal = DialogPrimitive.Portal;
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
-  // ✅ CORRECCIÓN 1: Basamos las props en motion.div en lugar de DialogPrimitive.Overlay
-  React.ComponentPropsWithoutRef<typeof motion.div>
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-background/80 backdrop-blur-sm',
+      'fixed inset-0 z-50 bg-black/60 backdrop-blur-xl',
       className
     )}
-    asChild
-  >
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-      {...props}
-    />
-  </DialogPrimitive.Overlay>
+    {...props}
+  />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-export interface DialogContentProps
-  extends React.ComponentPropsWithoutRef<typeof motion.div> {
-  children?: React.ReactNode;
-}
-
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  DialogContentProps
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-slate-700 bg-background-alt p-6 shadow-lg rounded-2xl',
+        'fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] rounded-2xl border border-white/10 bg-background-alt/60 p-6 shadow-lg backdrop-blur-lg', 
         className
       )}
       asChild
+      {...props}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="rounded-2xl border border-white/10 bg-background-alt/60 p-6 shadow-lg"
-        {...props}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary disabled:pointer-events-none">
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary">
           <X className="h-4 w-4" />
           <span className="sr-only">Cerrar</span>
         </DialogPrimitive.Close>
@@ -79,7 +58,6 @@ const DialogContent = React.forwardRef<
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-// Sub-componentes para una estructura semántica, como en el Card
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
 );

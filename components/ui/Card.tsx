@@ -2,16 +2,12 @@
 import * as React from 'react';
 import { motion, MotionProps } from 'framer-motion'; 
 import { cn } from '@/lib/utils';
-
-// El contenedor principal de la tarjeta
 export interface CardProps extends React.ComponentProps<typeof motion.div> {
   isHoverable?: boolean;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, isHoverable = false, ...props }, ref) => {
-    
-    // 2. Definimos el objeto de animación que se usará si isHoverable es true
     const hoverAnimation: MotionProps = isHoverable
       ? {
           whileHover: {
@@ -26,10 +22,9 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <motion.div
         ref={ref}
         className={cn(
-          'rounded-2xl border border-white/10 bg-background-alt/60 backdrop-blur-lg shadow-lg',
+          'rounded-2xl border border-white/10 bg-background-alt/60 backdrop-blur-xl shadow-lg',
           className
         )}
-        // 3. Aplicamos las animaciones solo si isHoverable es true
         {...hoverAnimation}
         {...props}
       />
@@ -38,7 +33,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 );
 Card.displayName = 'Card';
 
-// El cabecero de la tarjeta, ideal para el título y la descripción
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -51,7 +45,6 @@ const CardHeader = React.forwardRef<
 ));
 CardHeader.displayName = 'CardHeader';
 
-// El título de la tarjeta, usualmente un <h2> o <h3>
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
@@ -64,7 +57,6 @@ const CardTitle = React.forwardRef<
 ));
 CardTitle.displayName = 'CardTitle';
 
-// Una descripción opcional, con un color más sutil
 const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -77,7 +69,6 @@ const CardDescription = React.forwardRef<
 ));
 CardDescription.displayName = 'CardDescription';
 
-// El cuerpo principal de la tarjeta
 const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -86,7 +77,6 @@ const CardContent = React.forwardRef<
 ));
 CardContent.displayName = 'CardContent';
 
-// El pie de la tarjeta, ideal para botones de acción
 const CardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

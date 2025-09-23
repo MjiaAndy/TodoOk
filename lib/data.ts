@@ -2,10 +2,6 @@
 import { Cliente, Factura, Producto } from '@/types';
 const db = require('@/lib/db');
 
-export interface FacturaConCliente extends Factura {
-  cliente_nombre: string;
-}
-
 export async function getProductosFromDB(): Promise<Producto[]> {
   try {
     const { rows } = await db.query('SELECT * FROM productos ORDER BY id ASC');
@@ -26,7 +22,7 @@ export async function getClientesFromDB(): Promise<Cliente[]> {
   }
 }
 
-export async function getFacturasFromDB(): Promise<FacturaConCliente[]> {
+export async function getFacturasFromDB(): Promise<Factura[]> {
   try {
     const query = `
       SELECT f.id, f.total, f.fecha, f.impuesto, f.descuento, c.nombre AS cliente_nombre 
@@ -39,4 +35,22 @@ export async function getFacturasFromDB(): Promise<FacturaConCliente[]> {
     console.error('Error al obtener facturas de la DB:', error);
     throw new Error('Failed to fetch facturas.');
   }
+}
+
+export async function createProductoInDB(producto: Omit<Producto, 'id'>): Promise<Producto> {
+  const { nombre, precio, stock } = producto;
+  const { rows } = await db.query(
+    'INSERT INTO productos (nombre, precio, stock) VALUES ($1, $2, $3) RETURNING *',
+    [nombre, precio, stock]
+  );
+  return rows[0];
+}
+
+export async function createClienteInDB(cliente: Omit<Cliente, 'id'>): Promise<Cliente> {
+  const { nombre, email } = cliente;
+  const { rows } = await db.query(
+    'INSERT INTO clientes (nombre, email) VALUES ($1, $2) RETURNING *',
+    [nombre, email]
+  );
+  return rows[0];
 }

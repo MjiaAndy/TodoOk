@@ -1,12 +1,7 @@
 // components/pdf/FacturaPDF.tsx
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import { Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { FullInvoiceData } from '@/types';
-
-// Registramos las fuentes que usaremos. Puedes descargar Poppins desde Google Fonts y colocarla en /lib/fonts
-// Font.register({ family: 'Poppins', src: './lib/fonts/Poppins-Regular.ttf' });
-// Font.register({ family: 'Poppins', src: './lib/fonts/Poppins-Bold.ttf', fontWeight: 'bold' });
-// Por ahora, usaremos las fuentes por defecto que son compatibles.
 
 const styles = StyleSheet.create({
   page: { fontFamily: 'Helvetica', fontSize: 11, paddingTop: 30, paddingLeft: 60, paddingRight: 60, paddingBottom: 30 },
@@ -46,7 +41,6 @@ export const FacturaPDF = ({ data }: { data: FullInvoiceData }) => (
           </View>
         ))}
       </View>
-      
       <View style={styles.totals}>
         <Text>Total: ${parseFloat(data.factura.total as any).toFixed(2)}</Text>
       </View>

@@ -54,7 +54,7 @@ export function UserInput({ chatState, onAction, clientes, productos }: UserInpu
             const producto = productos.find(p => p.id === parseInt(selectedProductId));
             if (producto) onAction({ type: 'PRODUCT_ADDED', payload: producto });
           }}>Añadir</Button>
-          <Button onClick={() => onAction({ type: 'FINISH_ADDING_PRODUCTS' })} variant="secondary">Finalizar</Button>
+          <Button onClick={() => onAction({ type: 'FINISH_ADDING_PRODUCTS' })} variant="secondary">Continuar</Button>
         </div>
       );
       
@@ -70,7 +70,7 @@ export function UserInput({ chatState, onAction, clientes, productos }: UserInpu
       return (
         <form onSubmit={(e) => { e.preventDefault(); onAction({ type: 'SET_DISCOUNT', payload: discountValue }); }} className="flex items-center gap-2">
           <Input type="number" placeholder="Ej: 10" value={discountValue} onChange={e => setDiscountValue(e.target.value)} />
-          <Button type="submit">Aplicar %</Button>
+          <Button type="submit">%</Button>
         </form>
       );
     

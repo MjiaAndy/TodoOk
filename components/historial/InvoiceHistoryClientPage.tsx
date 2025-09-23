@@ -49,7 +49,7 @@ export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClie
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Historial de Facturas</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Facturas Emitidas</h2>
         <Button size="lg" onClick={exportarAExcel} variant="secondary" className="flex items-center gap-2" disabled={isExporting}>
           {isExporting ? (
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -60,10 +60,10 @@ export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClie
         </Button>
       </div>
       <Card isHoverable>
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle>Facturas Emitidas</CardTitle>
           <CardDescription>Lista de todas las facturas generadas.</CardDescription>
-        </CardHeader>
+        </CardHeader> */}
         <CardContent>
           <Table>
             <TableHeader>

@@ -1,3 +1,4 @@
+// app/migrations/
 exports.up = (pgm) => {
   // 1. Crear tabla de clientes
   pgm.createTable('clientes', {

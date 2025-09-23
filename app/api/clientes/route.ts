@@ -2,8 +2,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { ClientSchema } from '@/lib/schemas'
-const db = require('@/lib/db');
-import { getClientesFromDB } from '@/lib/data';
+import { getClientesFromDB, createClienteInDB } from '@/lib/data';
 
 export async function GET() {
   try {
@@ -19,13 +18,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validatedData = ClientSchema.parse(body);
-    const { nombre, email } = validatedData;
+    const nuevoCliente = await createClienteInDB(validatedData);
 
-    const { rows } = await db.query(
-      'INSERT INTO clientes (nombre, email) VALUES ($1, $2) RETURNING *',
-      [nombre, email]
-    );
-    return NextResponse.json(rows[0], { status: 201 });
+    return NextResponse.json(nuevoCliente, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });

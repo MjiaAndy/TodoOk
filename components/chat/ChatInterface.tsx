@@ -10,12 +10,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChatMessage } from './ChatMessage';
 import { UserInput } from './UserInput';
 import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, ItemFactura } from '@/types';
+import {ChatInterfaceProps, ChatAction, ChatComponentState} from '@/types'
 import { Loader2 } from 'lucide-react';
 
-interface ChatInterfaceProps {
-  initialClientes: Cliente[];
-  initialProductos: Producto[];
-}
 
 const getInitialMessages = (): ChatMessageType[] => [
   {
@@ -43,9 +40,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
 
   const addMessage = (sender: 'bot' | 'user', content: React.ReactNode) => {
     setMessages(prevMessages => {
-      // Obtenemos el ID más alto de los mensajes existentes
       const lastId = prevMessages.length > 0 ? prevMessages[prevMessages.length - 1].id : 0;
-      
       const newMessage: ChatMessageType = {
         id: lastId + 1,
         sender,
@@ -206,7 +201,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
       <div className="hidden lg:block">
         <Card className="sticky top-8" isHoverable>
           <CardHeader>
-            <CardTitle>Borrador de Factura</CardTitle>
+            <CardTitle>Vista previa Factura</CardTitle>
             <CardDescription>{factura.cliente ? `Cliente: ${factura.cliente.nombre}` : 'Ningún cliente seleccionado'}</CardDescription>
           </CardHeader>
           <CardContent>

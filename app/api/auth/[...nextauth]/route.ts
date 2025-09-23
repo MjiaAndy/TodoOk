@@ -21,22 +21,26 @@ const handler = NextAuth({
         if (!credentials?.email || !credentials.password) {
           return null;
         }
-        const { rows } = await db.query('SELECT * FROM usuarios WHERE email = $1', [credentials.email]);
+        const { rows } = await db.query(
+          'SELECT id, nombre, email, password FROM usuarios WHERE email = $1', 
+          [credentials.email]
+        );
         const user = rows[0];
 
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
+
         const passwordsMatch = await bcrypt.compare(credentials.password, user.password);
 
         if (passwordsMatch) {
           return { id: user.id, name: user.nombre, email: user.email };
-        } else {
-          return null;
         }
+        return null;
       }
     }),
   ],
+  // pages: {
+  //   signIn: '/auth/signin', // ✅ Asegúrate de que esta línea exista
+  // },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: { /* ... (tus callbacks se mantienen igual) ... */ },
   // ... (puedes añadir una página de error personalizada aquí si quieres)

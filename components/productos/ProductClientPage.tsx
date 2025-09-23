@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { Producto } from '@/types';
+import { Producto, ProductClientPageProps } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -18,15 +18,9 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { PlusCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-interface ProductClientPageProps {
-  initialProducts: Producto[];
-}
-
 export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
   const [productos, setProductos] = useState<Producto[]>(initialProducts);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Estado para el nuevo producto
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
   const [stock, setStock] = useState('');
@@ -42,16 +36,15 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
         stock: parseInt(stock),
       };
 
-    // 4. Usamos toast.promise para un feedback completo
     await toast.promise(
       axios.post('/api/productos', nuevoProducto),
       {
         loading: 'Guardando producto...',
         success: (res) => {
-          setProductos([...productos, res.data]); // Actualizamos el estado
-          setNombre(''); setPrecio(''); setStock(''); // Limpiamos el form
-          setIsModalOpen(false); // Cerramos el modal
-          return '¡Producto agregado con éxito!'; // Mensaje de éxito
+          setProductos([...productos, res.data]); 
+          setNombre(''); setPrecio(''); setStock(''); 
+          setIsModalOpen(false); 
+          return '¡Producto agregado con éxito!'; 
         },
         error: (err) => `Error: ${err.response?.data?.error || 'No se pudo agregar el producto.'}`,
         }
@@ -64,7 +57,7 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Gestión de Productos</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Inventario Actual</h2>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
             <Button size="lg" className="flex items-center gap-2">
@@ -104,10 +97,6 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
       </div>
 
       <Card isHoverable>
-        <CardHeader>
-          <CardTitle>Inventario Actual</CardTitle>
-          <CardDescription>Lista de todos los productos registrados.</CardDescription>
-        </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
@@ -118,26 +107,25 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
                 <TableHead>Stock</TableHead>
               </TableRow>
             </TableHeader>
-            <AnimatePresence>
               <TableBody>
-                {productos.map((producto) => (
-                  // 3. Reemplazamos <TableRow> por <motion.tr> y añadimos las animaciones
-                  <motion.tr
-                    key={producto.id}
-                    layout
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="border-b border-slate-700 transition-colors hover:bg-background-alt/50"
-                  >
-                    <TableCell>{producto.id}</TableCell>
-                    <TableCell className="font-medium text-foreground">{producto.nombre}</TableCell>
-                    <TableCell>${parseFloat(producto.precio as any).toFixed(2)}</TableCell>
-                    <TableCell>{producto.stock}</TableCell>
-                  </motion.tr>
-                ))}
+                <AnimatePresence>
+                  {productos.map((producto) => (
+                    <motion.tr
+                      key={producto.id}
+                      layout
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="border-b border-slate-700 transition-colors hover:bg-background-alt/50"
+                    >
+                      <TableCell>{producto.id}</TableCell>
+                      <TableCell className="font-medium text-foreground">{producto.nombre}</TableCell>
+                      <TableCell>${parseFloat(producto.precio as any).toFixed(2)}</TableCell>
+                      <TableCell>{producto.stock}</TableCell>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
               </TableBody>
-            </AnimatePresence>
           </Table>
         </CardContent>
       </Card>

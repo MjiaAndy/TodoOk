@@ -6,9 +6,6 @@ import * as LabelPrimitive from '@radix-ui/react-label';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-// Instalamos la dependencia de Radix UI para la base del label
-// npm install @radix-ui/react-label
-
 const labelVariants = cva(
   'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground-alt'
 );

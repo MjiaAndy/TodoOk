@@ -1,3 +1,4 @@
+// app/clientes/page.tsx
 import { ClientClientPage } from '@/components/clientes/ClientPage';
 import { getClientesFromDB } from '@/lib/data';
 

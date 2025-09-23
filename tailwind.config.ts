@@ -1,15 +1,14 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+// tailwind.config.js
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        // Le decimos a Tailwind que use nuestras variables CSS.
-        // La sintaxis `hsl(var(...) / <alpha-value>)` es para que la opacidad funcione.
         background: {
           DEFAULT: 'hsl(var(--background) / <alpha-value>)',
           alt: 'hsl(var(--background-alt) / <alpha-value>)',
@@ -44,3 +43,5 @@ module.exports = {
   },
   plugins: [],
 };
+
+export default config

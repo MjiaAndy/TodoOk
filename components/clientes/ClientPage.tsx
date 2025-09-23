@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { Cliente } from '@/types';
+import { Cliente, ClientClientPageProps } from '@/types';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -12,17 +12,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/Dialog';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
 import { PlusCircle, Loader2 } from 'lucide-react';
-
-interface ClientClientPageProps {
-  initialClients: Cliente[];
-}
+import { AnimatePresence, motion } from 'framer-motion';
 
 export function ClientClientPage({ initialClients }: ClientClientPageProps) {
   const [clientes, setClientes] = useState<Cliente[]>(initialClients);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Estado para el nuevo cliente
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
 
@@ -103,13 +98,15 @@ export function ClientClientPage({ initialClients }: ClientClientPageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {clientes.map((cliente) => (
-                <TableRow key={cliente.id}>
-                  <TableCell>{cliente.id}</TableCell>
-                  <TableCell className="font-medium text-foreground">{cliente.nombre}</TableCell>
-                  <TableCell>{cliente.email}</TableCell>
-                </TableRow>
-              ))}
+              <AnimatePresence>
+                {clientes.map((cliente) => (
+                  <motion.tr key={cliente.id}>
+                    <TableCell>{cliente.id}</TableCell>
+                    <TableCell className="font-medium text-foreground">{cliente.nombre}</TableCell>
+                    <TableCell>{cliente.email}</TableCell>
+                  </motion.tr>
+                ))}
+              </AnimatePresence> 
             </TableBody>
           </Table>
         </CardContent>

@@ -8,14 +8,10 @@ import { motion } from 'framer-motion';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
-
-// ✅ 1. Importamos el componente 'Group' desde la librería base de Radix.
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
-
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
-// ✅ 1. Extraemos 'children' de las props para manejarlo explícitamente
 >(({ className, sideOffset = 8, align = 'start', children, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
@@ -23,13 +19,12 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       align={align}
       className={cn(
-        'z-50 min-w-[12rem] overflow-hidden rounded-2xl border border-white/10 bg-background-alt/70 p-2 text-foreground shadow-lg backdrop-blur-xl',
+        'z-50 min-w-[12rem] overflow-hidden rounded-2xl border border-white/10 bg-background-alt/70 p-2 text-foreground shadow-lg backdrop-blur-2xl',
         className
       )}
       asChild
       {...props}
     >
-      {/* ✅ 2. Abrimos el motion.div y le pasamos los 'children' para que los renderice */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: -5 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -83,8 +78,6 @@ const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-
-// --- Exportación Final ---
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -92,5 +85,5 @@ export {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuGroup, // ✅ 2. Añadimos 'DropdownMenuGroup' a la exportación.
+  DropdownMenuGroup, 
 };

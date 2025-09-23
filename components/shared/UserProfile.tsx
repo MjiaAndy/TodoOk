@@ -2,7 +2,6 @@
 'use client';
 
 import { useSession, signOut, signIn } from 'next-auth/react';
-import Image from 'next/image';
 import { LogOut, Settings, User, LifeBuoy, Loader2 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -11,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuGroup, // ✅ Importamos el componente de grupo
+  DropdownMenuGroup, 
 } from '@/components/ui/DropdownMenu';
 import { Button } from '../ui/Button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
@@ -59,7 +58,6 @@ export function UserProfile() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        {/* ✅ Grupo 1: Cuenta */}
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
@@ -72,7 +70,6 @@ export function UserProfile() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
-        {/* ✅ Grupo 2: Ayuda */}
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <LifeBuoy className="mr-2 h-4 w-4" />
@@ -81,7 +78,6 @@ export function UserProfile() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         
-        {/* ✅ Grupo 3: Sesión */}
         <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/' })} className="cursor-pointer text-danger hover:bg-danger hover:text-white focus:bg-danger/90 focus:text-white">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar sesión</span>
