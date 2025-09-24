@@ -3,17 +3,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import React from 'react';
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
-import { FullInvoiceData, ApiRouteContext } from '@/types'; // ✅ 1. Importamos el nuevo tipo
+import { FullInvoiceData } from '@/types';
 import db from '@/lib/db';
 
-// ✅ 2. Usamos el tipo genérico para el contexto
+// ✅ 1. Definimos el tipo de contexto que Vercel espera, con 'params' como una Promesa.
+type RouteContext = {
+  params: Promise<{ id: string }>;
+}
+
 export async function GET(
   request: NextRequest,
-  context: ApiRouteContext
+  context: RouteContext // ✅ 2. Usamos el nuevo tipo aquí
 ) {
   try {
-    // ✅ 3. Obtenemos el 'id' de forma segura desde los params
-    const facturaIdString = context.params.id;
+    // ✅ 3. "Desenvolvemos" la Promesa para acceder a los parámetros de forma segura.
+    const { id: facturaIdString } = await context.params;
+    
     if (!facturaIdString) {
       return NextResponse.json({ error: 'Falta el ID de la factura' }, { status: 400 });
     }

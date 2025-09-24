@@ -35,9 +35,6 @@ export interface ItemFactura extends Producto {
   cantidad: number;
 }
 
-export type ApiRouteContext = {
-  params: { [key: string]: string };
-};
 
 // 2. COMPONENTES DE PÁGINA Y UI
 
