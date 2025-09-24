@@ -33,19 +33,18 @@ export async function POST(request: Request) {
       if (!productoDB || productoDB.stock < producto.cantidad) {
         throw new Error(`Stock insuficiente para el producto con ID ${producto.id}`);
       }
-      const precioUnitario = productoDB.precio; 
+      const precioUnitario = productoDB.precio;
       subtotal += (precioUnitario * producto.cantidad);
       productosDetallados.push({ ...producto, precio_unitario: precioUnitario });
     }
     
     const montoDescuento = subtotal * (descuento / 100);
     const baseImponible = subtotal - montoDescuento;
-    const montoIVA = baseImponible * (impuesto / 100);
-    const totalFinal = baseImponible + montoIVA;
+    const totalFinal = baseImponible + impuesto;
 
     const facturaResult = await client.query(
       'INSERT INTO facturas (cliente_id, total, impuesto, descuento) VALUES ($1, $2, $3, $4) RETURNING id',
-      [cliente_id, totalFinal, impuesto, descuento]
+      [cliente_id, totalFinal, impuesto, montoDescuento] 
     );
     const nuevaFacturaId = facturaResult.rows[0].id;
 
@@ -65,10 +64,10 @@ export async function POST(request: Request) {
 
   } catch (error) {
     await client.query('ROLLBACK');
-    const err = error as any;
-    if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: err.issues }, { status: 400 });
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.issues }, { status: 400 });
     }
+    const err = error as Error;
     return NextResponse.json({ error: 'Error al procesar la factura: ' + err.message }, { status: 500 });
   } finally {
     client.release();
