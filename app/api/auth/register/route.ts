@@ -17,13 +17,14 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json(rows[0], { status: 201 });
-  } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.issues }, { status: 400 });
-    }
-    if (error.code === '23505') { 
-      return NextResponse.json({ error: 'El email ya está registrado.' }, { status: 409 });
-    }
+  } catch (error) { 
+  const err = error as any; 
+  if (err instanceof z.ZodError) {
+    return NextResponse.json({ error: err.issues }, { status: 400 });
+  }
+  if (err.code === '23505') { 
+    return NextResponse.json({ error: 'El email ya está registrado.' }, { status: 409 });
+  }
     return NextResponse.json({ error: 'Error al registrar el usuario.' }, { status: 500 });
   }
 }

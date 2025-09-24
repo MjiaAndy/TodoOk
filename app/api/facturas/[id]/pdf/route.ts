@@ -1,6 +1,7 @@
 // app/api/facturas/[id]/pdf/route.ts
 import { NextResponse } from 'next/server';
 import React from 'react';
+import {z} from 'zod'
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
 import db from '@/lib/db';
@@ -46,8 +47,14 @@ export async function GET(
       },
     });
 
-  } catch (error: any) {
-    console.error(error);
-    return NextResponse.json({ error: 'Error al generar el PDF: ' + error.message }, { status: 500 });
+  } catch (error) { 
+    const err = error as any; 
+    if (err instanceof z.ZodError) {
+      return NextResponse.json({ error: err.issues }, { status: 400 });
+    }
+    if (err.code === '23505') { 
+      return NextResponse.json({ error: 'El PDF ya esta creado.' }, { status: 409 });
+    }
+    return NextResponse.json({ error: 'Error al generar el PDF: '}, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { ChatMessage } from './ChatMessage';
 import { UserInput } from './UserInput';
-import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, ItemFactura, DraftFactura } from '@/types';
+import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, DraftFactura, ChatAction } from '@/types';
 import {ChatInterfaceProps} from '@/types'
 import { Loader2 } from 'lucide-react';
 
@@ -50,7 +50,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
     });
   };
 
-  const handleUserAction = async (action: { type: string; payload?: any }) => {
+  const handleUserAction = async (action: ChatAction) => {
     switch (action.type) {
       case 'CLIENT_SELECTED':
         const cliente = action.payload as Cliente;
@@ -97,7 +97,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         break;
       }
       case 'SET_DISCOUNT': {
-        const desc = parseFloat(action.payload);
+        const desc = action.payload;
         if (!isNaN(desc) && desc > 0) {
           setDescuento(desc);
           addMessage('user', `Aplicar un ${desc}% de descuento.`);
@@ -122,7 +122,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         break;
       }
       case 'SET_INSTALLMENTS':{
-        const cuotas = parseInt(action.payload);
+        const cuotas = action.payload;
         setFactura(prev => ({ ...prev, cuotas }));
         addMessage('user', `${cuotas} cuota(s).`);
         addMessage('bot', '¡Todo listo! Aquí está el resumen final de la factura. ¿Confirmas?');

@@ -21,10 +21,14 @@ export async function POST(request: Request) {
     const nuevoProducto = await createProductoInDB(validatedData);
 
     return NextResponse.json(nuevoProducto, { status: 201 });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.issues }, { status: 400 });
-    }
+  } catch (error) { 
+  const err = error as any; 
+  if (err instanceof z.ZodError) {
+    return NextResponse.json({ error: err.issues }, { status: 400 });
+  }
+  if (err.code === '23505') { 
+    return NextResponse.json({ error: 'El producto ya esta creado.' }, { status: 409 });
+  }
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }
