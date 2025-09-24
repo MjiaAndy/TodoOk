@@ -96,9 +96,7 @@ export type ChatAction =
   | { type: 'SET_DISCOUNT'; payload: number }
   | { type: 'SET_PAYMENT'; payload: string }
   | { type: 'SET_INSTALLMENTS'; payload: number }
-  | { type: 'CONFIRM_INVOICE_START' }
-  | { type: 'CONFIRM_INVOICE_SUCCESS'; payload: { facturaId: number } }
-  | { type: 'CONFIRM_INVOICE_ERROR'; payload: { error: string } }
+  | { type: 'CONFIRM_INVOICE' }
   | { type: 'DOWNLOAD_PDF' }
   | { type: 'RESET' };
 

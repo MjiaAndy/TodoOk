@@ -62,7 +62,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
 
       case 'PRODUCT_ADDED':
         const producto = action.payload as Producto;
-        let itemExistente = factura.items.find(item => item.id === producto.id);
+        const itemExistente = factura.items.find(item => item.id === producto.id);
         if (itemExistente) {
           setFactura({ ...factura, items: factura.items.map(item =>
             item.id === producto.id ? { ...item, cantidad: item.cantidad + 1 } : item
@@ -71,7 +71,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
           setFactura({ ...factura, items: [...factura.items, { ...producto, precio: Number(producto.precio), cantidad: 1 }]});
         }
         addMessage('user', `Añadir: ${producto.nombre}`);
-        addMessage('bot', 'Producto añadido. Puedes agregar más o hacer clic en "Finalizar".');
+        addMessage('bot', 'Producto añadido. Puedes agregar más o hacer clic en "Continuar".');
         break;
 
       case 'FINISH_ADDING_PRODUCTS':

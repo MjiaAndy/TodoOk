@@ -17,7 +17,7 @@ pool.connect()
 
 const db = {
   // ✅ Añadimos los tipos correctos a nuestra función 'query'
-  query: (text: string, params?: any[]) => pool.query(text, params),
+  query: (text: string, params?: (string | number | boolean | null)[]) => pool.query(text, params),
   getClient: () => pool.connect()
 };
 

@@ -2,13 +2,13 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatState, Cliente, Producto } from '@/types';
+import { ChatState, Cliente, Producto, ChatAction } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 
 interface UserInputProps {
   chatState: ChatState;
-  onAction: (action: { type: string; payload?: any }) => void;
+  onAction: (action: ChatAction) => void;
   clientes: Cliente[];
   productos: Producto[];
 }
@@ -68,9 +68,9 @@ export function UserInput({ chatState, onAction, clientes, productos }: UserInpu
     
     case 'ENTERING_DISCOUNT':
       return (
-        <form onSubmit={(e) => { e.preventDefault(); onAction({ type: 'SET_DISCOUNT', payload: discountValue }); }} className="flex items-center gap-2">
+        <form onSubmit={(e) => { e.preventDefault(); onAction({ type: 'SET_DISCOUNT', payload: parseFloat(discountValue) }); }} className="flex items-center gap-2">
           <Input type="number" placeholder="Ej: 10" value={discountValue} onChange={e => setDiscountValue(e.target.value)} />
-          <Button type="submit">%</Button>
+          <Button type="submit">Aplicar</Button>
         </form>
       );
     
@@ -90,7 +90,7 @@ export function UserInput({ chatState, onAction, clientes, productos }: UserInpu
        const cuotas = [1, 3, 6, 9, 12, 18];
        return (
         <select 
-          onChange={(e) => onAction({ type: 'SET_INSTALLMENTS', payload: e.target.value })}
+          onChange={(e) => onAction({ type: 'SET_INSTALLMENTS', payload: parseInt(e.target.value) })}
           className="flex h-10 w-full rounded-md border border-slate-700 bg-background-alt px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">-- Elige las cuotas --</option>

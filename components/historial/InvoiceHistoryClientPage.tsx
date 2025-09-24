@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Download, Loader2 } from 'lucide-react';
 
 export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClientPageProps) {
-  const [facturas, setFacturas] = useState<Factura[]>(initialInvoices);
+  const [facturas] = useState<Factura[]>(initialInvoices);
   const [isExporting, setIsExporting] = useState(false);
 
   const exportarAExcel = async () => {

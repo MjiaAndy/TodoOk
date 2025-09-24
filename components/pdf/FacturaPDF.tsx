@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   header: { textAlign: 'center', marginBottom: 20 },
   invoiceTitle: { fontSize: 24, fontWeight: 'bold' },
   customerInfo: { marginBottom: 20 },
-  table: { display: 'flex', flexDirection: 'column' as 'column', width: 'auto', borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderBottomWidth: 0 },
+  table: { display: 'flex', flexDirection: 'column', width: 'auto', borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderBottomWidth: 0 },
   tableRow: { flexDirection: 'row' },
   tableColHeader: { width: '25%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, backgroundColor: '#E4E4E4', padding: 5, fontWeight: 'bold' },
   tableCol: { width: '25%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, padding: 5 },
@@ -36,13 +36,13 @@ export const FacturaPDF = ({ data }: { data: FullInvoiceData }) => (
           <View key={item.id} style={styles.tableRow}>
             <Text style={{ ...styles.tableCol, width: '40%' }}>{item.nombre}</Text>
             <Text style={{ ...styles.tableCol, width: '20%' }}>{item.cantidad}</Text>
-            <Text style={{ ...styles.tableCol, width: '20%' }}>${parseFloat(item.precio as any).toFixed(2)}</Text>
-            <Text style={{ ...styles.tableCol, width: '20%' }}>${(parseFloat(item.precio as any) * item.cantidad).toFixed(2)}</Text>
+            <Text style={{ ...styles.tableCol, width: '20%' }}>${item.precio.toFixed(2)}</Text>
+            <Text style={{ ...styles.tableCol, width: '20%' }}>${(item.precio * item.cantidad).toFixed(2)}</Text>
           </View>
         ))}
       </View>
       <View style={styles.totals}>
-        <Text>Total: ${parseFloat(data.factura.total as any).toFixed(2)}</Text>
+        <Text>Total: ${data.factura.total.toFixed(2)}</Text>
       </View>
     </Page>
 );
