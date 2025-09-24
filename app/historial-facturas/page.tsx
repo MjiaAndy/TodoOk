@@ -1,4 +1,3 @@
-// app/historial-facturas/page.tsx
 import { InvoiceHistoryClientPage } from '@/components/historial/InvoiceHistoryClientPage';
 import { getFacturasFromDB } from '@/lib/data';
 

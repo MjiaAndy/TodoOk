@@ -1,4 +1,3 @@
-// components/chat/ChatInterface.tsx
 'use client';
 
 import { useState, useMemo } from 'react';

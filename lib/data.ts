@@ -1,4 +1,3 @@
-// lib/data.ts
 import { Cliente, Factura, Producto } from '@/types';
 import db from '@/lib/db';
 

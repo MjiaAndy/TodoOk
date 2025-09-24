@@ -1,4 +1,3 @@
-// components/historial/InvoiceHistoryClientPage.tsx
 'use client';
 
 import { useState } from 'react';

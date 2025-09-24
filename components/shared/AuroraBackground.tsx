@@ -1,4 +1,3 @@
-// components/shared/AuroraBackground.tsx
 'use client';
 
 export function AuroraBackground() {

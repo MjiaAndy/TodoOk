@@ -1,4 +1,3 @@
-// components/ui/DropdownMenu.tsx - VERSIÓN FINAL Y COMPLETA
 'use client';
 
 import * as React from 'react';

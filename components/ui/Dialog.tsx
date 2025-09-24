@@ -1,4 +1,3 @@
-// components/ui/Dialog.tsx - VERSIÓN FINAL Y LIMPIA
 'use client';
 
 import * as React from 'react';

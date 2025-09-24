@@ -1,4 +1,3 @@
-// components/shared/UserProfile.tsx - VERSIÓN FINAL Y MEJORADA
 'use client';
 
 import { useSession, signOut, signIn } from 'next-auth/react';

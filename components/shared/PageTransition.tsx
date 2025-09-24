@@ -1,4 +1,3 @@
-// components/shared/PageTransition.tsx - VERSIÓN MEJORADA
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';

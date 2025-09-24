@@ -1,4 +1,3 @@
-// app/api/facturas/route.ts - CORREGIDO Y OPTIMIZADO
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { InvoiceSchema } from '@/lib/schemas';

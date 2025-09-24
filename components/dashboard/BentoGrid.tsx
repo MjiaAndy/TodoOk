@@ -1,4 +1,3 @@
-// components/dashboard/BentoGrid.tsx
 'use client';
 
 import { useEffect, useRef} from 'react';

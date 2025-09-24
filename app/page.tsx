@@ -1,4 +1,3 @@
-// app/page.tsx - El Nuevo Dashboard
 import { BentoGrid } from '@/components/dashboard/BentoGrid';
 import { Factura } from '@/types';
 import { getFacturasFromDB } from '@/lib/data';

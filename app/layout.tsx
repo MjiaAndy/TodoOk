@@ -1,4 +1,3 @@
-// app/layout.tsx 
 import './globals.css'; 
 import { Poppins } from 'next/font/google';
 import { Sidebar } from '@/components/shared/Sidebar';
@@ -6,6 +5,7 @@ import { PageTransition } from '@/components/shared/PageTransition';
 import 'gridstack/dist/gridstack.min.css';
 import { Providers } from '@/components/shared/Providers';
 import { AuroraBackground } from '@/components/shared/AuroraBackground'; 
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -33,6 +33,7 @@ export default function RootLayout({
             </main>
           </div>
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );

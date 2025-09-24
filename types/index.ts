@@ -1,7 +1,4 @@
-// types/index.ts
-
 // 1. DATOS CENTRALES (API / DB)
-
 export interface Producto {
   id: number;
   nombre: string;
@@ -136,3 +133,7 @@ export type KpiChangeData = {
   texto: string;
   status: 'increase' | 'decrease' | 'neutral';
 };
+
+export type RouteContext = {
+  params: Promise<{ id: string }>;
+}

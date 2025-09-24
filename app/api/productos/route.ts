@@ -1,4 +1,3 @@
-// app/api/productos/route.ts - CORREGIDO
 import { NextResponse } from 'next/server';
 import { ProductSchema } from '@/lib/schemas'; 
 import { z } from 'zod';

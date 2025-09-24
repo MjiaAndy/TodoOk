@@ -1,22 +1,15 @@
-// app/api/facturas/[id]/pdf/route.ts - VERSIÓN FINAL Y COMPATIBLE
 import { NextRequest, NextResponse } from 'next/server';
 import React from 'react';
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
-import { FullInvoiceData } from '@/types';
+import { FullInvoiceData, RouteContext } from '@/types';
 import db from '@/lib/db';
-
-// ✅ 1. Definimos el tipo de contexto que Vercel espera, con 'params' como una Promesa.
-type RouteContext = {
-  params: Promise<{ id: string }>;
-}
 
 export async function GET(
   request: NextRequest,
-  context: RouteContext // ✅ 2. Usamos el nuevo tipo aquí
+  context: RouteContext
 ) {
   try {
-    // ✅ 3. "Desenvolvemos" la Promesa para acceder a los parámetros de forma segura.
     const { id: facturaIdString } = await context.params;
     
     if (!facturaIdString) {
@@ -24,7 +17,6 @@ export async function GET(
     }
     const facturaId = parseInt(facturaIdString);
     
-    // --- Lógica para obtener datos (sin cambios) ---
     const facturaRes = await db.query('SELECT * FROM facturas WHERE id = $1', [facturaId]);
     if (facturaRes.rows.length === 0) {
       return NextResponse.json({ error: 'Factura no encontrada' }, { status: 404 });
@@ -41,7 +33,6 @@ export async function GET(
       items: itemsRes.rows,
     };
     
-    // --- Lógica de renderizado y respuesta (sin cambios) ---
     const pdfStream = await renderToStream(
       React.createElement(Document, null, React.createElement(FacturaPDF, { data: fullInvoiceData }))
     );

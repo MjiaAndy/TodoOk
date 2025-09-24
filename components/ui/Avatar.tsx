@@ -1,4 +1,3 @@
-// components/ui/Avatar.tsx
 'use client';
 
 import * as React from 'react';

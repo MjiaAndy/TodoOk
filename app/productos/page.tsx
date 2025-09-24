@@ -1,4 +1,3 @@
-// app/productos/page.tsx
 import { ProductClientPage } from '@/components/productos/ProductClientPage';
 import { getProductosFromDB } from '@/lib/data';
 

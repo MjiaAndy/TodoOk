@@ -1,4 +1,3 @@
-// components/chat/UserInput.tsx
 'use client';
 
 import { useState } from 'react';

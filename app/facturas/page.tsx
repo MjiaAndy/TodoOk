@@ -1,4 +1,3 @@
-// app/(rutas)/facturas/page.tsx - VERSIÓN OPTIMIZADA
 import { ChatInterface } from "@/components/chat/ChatInterface";
 import { Producto, Cliente } from '@/types';
 import { getProductosFromDB, getClientesFromDB } from "@/lib/data";

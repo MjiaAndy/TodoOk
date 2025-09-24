@@ -1,4 +1,3 @@
-// components/dashboard/KpiChangeIndicator.tsx
 'use client';
 
 import { KpiChangeIndicatorProps } from '@/types'; 

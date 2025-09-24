@@ -1,8 +1,6 @@
-// lib/db.ts - VERSIÓN FINAL CON TIPOS
 import { Pool, types } from 'pg';
 import 'dotenv/config';
 
-// OID 1700 es para tipos NUMERIC/DECIMAL
 types.setTypeParser(1700, (val: string) => {
   return parseFloat(val);
 });
@@ -16,7 +14,6 @@ pool.connect()
   .catch((err: Error) => console.error('❌ Error de conexión al pool:', err.stack));
 
 const db = {
-  // ✅ Añadimos los tipos correctos a nuestra función 'query'
   query: (text: string, params?: (string | number | boolean | null)[]) => pool.query(text, params),
   getClient: () => pool.connect()
 };

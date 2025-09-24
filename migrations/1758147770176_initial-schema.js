@@ -1,11 +1,9 @@
-// app/migrations/
 exports.up = (pgm) => {
   // 1. Crear tabla de clientes
   pgm.createTable('clientes', {
-    id: 'id', // Alias para SERIAL PRIMARY KEY
+    id: 'id', 
     nombre: { type: 'varchar(255)', notNull: true },
     email: { type: 'varchar(255)', notNull: true, unique: true },
-    // Aquí podemos añadir los nuevos campos que definimos en los types
     dni: { type: 'varchar(50)' },
     direccion: { type: 'varchar(255)' },
     condicion_iva: { type: 'varchar(100)' },
@@ -28,7 +26,7 @@ exports.up = (pgm) => {
       type: 'integer', 
       notNull: true, 
       references: 'clientes(id)', 
-      onDelete: 'SET NULL' // Si un cliente se borra, la factura no se borra, solo pierde la referencia
+      onDelete: 'SET NULL' 
     },
     total: { type: 'decimal(10, 2)', notNull: true },
     impuesto: { type: 'decimal(10, 2)', notNull: true, default: 0.00 },
@@ -43,7 +41,7 @@ exports.up = (pgm) => {
       type: 'integer', 
       notNull: true, 
       references: 'facturas(id)', 
-      onDelete: 'CASCADE' // Si se borra la factura, se borran sus ítems
+      onDelete: 'CASCADE' 
     },
     producto_id: { 
       type: 'integer', 
@@ -59,7 +57,7 @@ exports.up = (pgm) => {
     id: 'id',
     nombre: { type: 'varchar(255)' },
     email: { type: 'varchar(255)', notNull: true, unique: true },
-    password: { type: 'varchar(255)', notNull: true }, // Aquí guardaremos el HASH
+    password: { type: 'varchar(255)', notNull: true },
     createdAt: {
       type: 'timestamp',
       notNull: true,
@@ -68,10 +66,7 @@ exports.up = (pgm) => {
   });
 };
 
-
-
 exports.down = (pgm) => {
-  // Para deshacer, borramos las tablas en orden inverso a su creación
   pgm.dropTable('factura_items');
   pgm.dropTable('facturas');
   pgm.dropTable('productos');
