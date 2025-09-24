@@ -1,19 +1,25 @@
-// app/api/facturas/[id]/pdf/route.ts - VERSIÓN FINAL Y CORREGIDA
-import { NextRequest, NextResponse } from 'next/server'; // ✅ 1. Importamos NextRequest
+// app/api/facturas/[id]/pdf/route.ts - VERSIÓN FINAL Y COMPATIBLE
+import { NextRequest, NextResponse } from 'next/server';
 import React from 'react';
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
-import { FullInvoiceData } from '@/types';
+import { FullInvoiceData, ApiRouteContext } from '@/types'; // ✅ 1. Importamos el nuevo tipo
 import db from '@/lib/db';
 
-// ✅ 2. Actualizamos la firma de la función GET
+// ✅ 2. Usamos el tipo genérico para el contexto
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: ApiRouteContext
 ) {
   try {
-    const { id: facturaIdString } = context.params;
+    // ✅ 3. Obtenemos el 'id' de forma segura desde los params
+    const facturaIdString = context.params.id;
+    if (!facturaIdString) {
+      return NextResponse.json({ error: 'Falta el ID de la factura' }, { status: 400 });
+    }
     const facturaId = parseInt(facturaIdString);
+    
+    // --- Lógica para obtener datos (sin cambios) ---
     const facturaRes = await db.query('SELECT * FROM facturas WHERE id = $1', [facturaId]);
     if (facturaRes.rows.length === 0) {
       return NextResponse.json({ error: 'Factura no encontrada' }, { status: 404 });
@@ -30,6 +36,7 @@ export async function GET(
       items: itemsRes.rows,
     };
     
+    // --- Lógica de renderizado y respuesta (sin cambios) ---
     const pdfStream = await renderToStream(
       React.createElement(Document, null, React.createElement(FacturaPDF, { data: fullInvoiceData }))
     );
