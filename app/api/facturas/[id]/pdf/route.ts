@@ -12,8 +12,6 @@ export async function GET(
 ) {
   try {
     const facturaId = parseInt(params.id);
-
-    // 1. Obtener los datos (sin cambios)
     const facturaRes = await db.query('SELECT * FROM facturas WHERE id = $1', [facturaId]);
     if (facturaRes.rows.length === 0) {
       return NextResponse.json({ error: 'Factura no encontrada' }, { status: 404 });
@@ -29,21 +27,16 @@ export async function GET(
       cliente: clienteRes.rows[0],
       items: itemsRes.rows,
     };
-
-    // 2. Renderizar el componente de React a un stream de PDF (sin cambios)
+    
     const pdfStream = await renderToStream(
       React.createElement(Document, null, React.createElement(FacturaPDF, { data: fullInvoiceData }))
     );
 
-    // ✅ 3. Convertimos el stream de Node.js a un Buffer
-    const chunks: Uint8Array[] = [];
-    // Usamos 'for await...of' que es la forma moderna de consumir un stream de Node.js
-    for await (const chunk of pdfStream as any) {
-      chunks.push(chunk);
+    const chunks: Buffer[] = [];
+    for await (const chunk of pdfStream as NodeJS.ReadableStream) {
+      chunks.push(Buffer.from(chunk));
     }
     const pdfBuffer = Buffer.concat(chunks);
-
-    // ✅ 4. Devolvemos el Buffer como respuesta. Esto es 100% compatible.
     return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
@@ -51,7 +44,7 @@ export async function GET(
       },
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     const err = error as Error;
     console.error("ERROR PDF:", err);
     return NextResponse.json({ error: 'Error al generar el PDF: ' + err.message }, { status: 500 });

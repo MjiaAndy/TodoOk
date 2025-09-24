@@ -1,16 +1,16 @@
-// app/api/facturas/route.ts
+// app/api/facturas/route.ts - CORREGIDO Y OPTIMIZADO
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { InvoiceSchema } from '@/lib/schemas';
 import db from '@/lib/db';
 import { getFacturasFromDB } from '@/lib/data';
 
-
 export async function GET() {
   try {
     const facturas = await getFacturasFromDB();
     return NextResponse.json(facturas);
-  } catch (err: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
@@ -44,10 +44,9 @@ export async function POST(request: Request) {
 
     const facturaResult = await client.query(
       'INSERT INTO facturas (cliente_id, total, impuesto, descuento) VALUES ($1, $2, $3, $4) RETURNING id',
-      [cliente_id, totalFinal, impuesto, montoDescuento] 
+      [cliente_id, totalFinal, impuesto, montoDescuento]
     );
     const nuevaFacturaId = facturaResult.rows[0].id;
-
     for (const producto of productosDetallados) {
       await client.query(
         'INSERT INTO factura_items (factura_id, producto_id, cantidad, precio_unitario) VALUES ($1, $2, $3, $4)',
@@ -61,8 +60,7 @@ export async function POST(request: Request) {
     
     await client.query('COMMIT');
     return NextResponse.json({ mensaje: 'Factura creada exitosamente.', facturaId: nuevaFacturaId }, { status: 201 });
-
-  } catch (error) {
+  } catch (error: unknown) {
     await client.query('ROLLBACK');
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
