@@ -10,13 +10,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChatMessage } from './ChatMessage';
 import { UserInput } from './UserInput';
 import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, ItemFactura } from '@/types';
-import {ChatInterfaceProps, ChatAction, ChatComponentState} from '@/types'
+import {ChatInterfaceProps} from '@/types'
 import { Loader2 } from 'lucide-react';
 
 
 const getInitialMessages = (): ChatMessageType[] => [
   {
-    id: Date.now(), // El primer ID puede ser el timestamp
+    id: Date.now(), 
     sender: 'bot',
     content: '¡Hola! Vamos a crear una nueva factura. Por favor, selecciona un cliente para comenzar.',
   },
@@ -159,7 +159,6 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
       
       case 'DOWNLOAD_PDF':
         if (lastInvoiceId) {
-          // Abrimos la URL del nuevo endpoint en una nueva pestaña para iniciar la descarga
           window.open(`/api/facturas/${lastInvoiceId}/pdf`, '_blank');
         }
         break;

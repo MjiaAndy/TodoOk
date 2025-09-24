@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from 'bcrypt';
-const db = require('@/lib/db');
+import db from '@/lib/db';
 
 const handler = NextAuth({
   providers: [
@@ -38,12 +38,7 @@ const handler = NextAuth({
       }
     }),
   ],
-  // pages: {
-  //   signIn: '/auth/signin', // ✅ Asegúrate de que esta línea exista
-  // },
   secret: process.env.NEXTAUTH_SECRET,
-  callbacks: { /* ... (tus callbacks se mantienen igual) ... */ },
-  // ... (puedes añadir una página de error personalizada aquí si quieres)
 });
 
 export { handler as GET, handler as POST };

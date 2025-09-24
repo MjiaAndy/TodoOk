@@ -1,22 +1,21 @@
 // components/dashboard/BentoGrid.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef} from 'react';
 import Link from 'next/link';
 import { GridStack } from 'gridstack';
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { DollarSign, Users, FileText, Package } from 'lucide-react';
 import { calcularCambioPorcentual } from '@/lib/utils';
-import { BentoGridProps, Factura } from '@/types';
+import { BentoGridProps } from '@/types';
 import { KpiChangeIndicator } from './KpiIndicador';
 
 
 export function BentoGrid({ stats, initialInvoices }: BentoGridProps) {
   const gridRef = useRef(null);
-  const [gridFacturas, setGridFacturas] = useState<Factura[]>(initialInvoices);
 
   useEffect(() => {
     if (gridRef.current) {

@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { InvoiceSchema } from '@/lib/schemas';
-const db = require('@/lib/db');
+import db from '@/lib/db';
 import { getFacturasFromDB } from '@/lib/data';
 
 

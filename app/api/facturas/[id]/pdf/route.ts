@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import React from 'react';
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
-const db = require('@/lib/db');
+import db from '@/lib/db';
 
 export async function GET(
   request: Request,

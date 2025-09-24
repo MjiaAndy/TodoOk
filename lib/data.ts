@@ -1,6 +1,6 @@
 // lib/data.ts
 import { Cliente, Factura, Producto } from '@/types';
-const db = require('@/lib/db');
+import db from '@/lib/db';
 
 export async function getProductosFromDB(): Promise<Producto[]> {
   try {

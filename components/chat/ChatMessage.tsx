@@ -3,12 +3,8 @@
 
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Bot, User } from 'lucide-react'; // Íconos para el asistente y el usuario
-
-interface ChatMessageProps {
-  sender: 'user' | 'bot';
-  children: React.ReactNode;
-}
+import { Bot, User } from 'lucide-react';
+import {ChatMessageProps} from '@/types'
 
 export function ChatMessage({ sender, children }: ChatMessageProps) {
   const isBot = sender === 'bot';

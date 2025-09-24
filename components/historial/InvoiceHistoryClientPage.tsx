@@ -7,7 +7,7 @@ import { json2csv } from 'json-2-csv'
 import { Factura, InvoiceHistoryClientPageProps } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { Download, Loader2 } from 'lucide-react';
 
 export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClientPageProps) {
@@ -60,10 +60,6 @@ export function InvoiceHistoryClientPage({ initialInvoices }: InvoiceHistoryClie
         </Button>
       </div>
       <Card isHoverable>
-        {/* <CardHeader>
-          <CardTitle>Facturas Emitidas</CardTitle>
-          <CardDescription>Lista de todas las facturas generadas.</CardDescription>
-        </CardHeader> */}
         <CardContent>
           <Table>
             <TableHeader>

@@ -72,6 +72,10 @@ export interface ChatMessage {
   sender: ChatMessageSender;
   content: React.ReactNode;
 }
+export interface ChatMessageProps {
+  sender: 'user' | 'bot';
+  children: React.ReactNode;
+}
 
 export type ChatState =
   | 'GREETING'

@@ -10,7 +10,6 @@ export const RegisterSchema = z.object({
 export const ClientSchema = z.object({
   nombre: z.string().min(3, { message: "El nombre debe tener al menos 3 caracteres." }),
   email: z.string().email({ message: "Por favor, ingresa un email válido." }),
-  // Puedes añadir más validaciones para dni, direccion, etc.
 });
 
 export const ProductSchema = z.object({

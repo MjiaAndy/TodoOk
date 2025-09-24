@@ -14,7 +14,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription
 } from '@/components/ui/Dialog';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { PlusCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -120,7 +120,7 @@ export function ProductClientPage({ initialProducts }: ProductClientPageProps) {
                     >
                       <TableCell>{producto.id}</TableCell>
                       <TableCell className="font-medium text-foreground">{producto.nombre}</TableCell>
-                      <TableCell>${parseFloat(producto.precio as any).toFixed(2)}</TableCell>
+                      <TableCell>${producto.precio.toFixed(2)}</TableCell>
                       <TableCell>{producto.stock}</TableCell>
                     </motion.tr>
                   ))}
