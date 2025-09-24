@@ -1,17 +1,19 @@
-// app/api/facturas/[id]/pdf/route.ts - VERSIÓN FINAL Y ROBUSTA
-import { NextResponse } from 'next/server';
+// app/api/facturas/[id]/pdf/route.ts - VERSIÓN FINAL Y CORREGIDA
+import { NextRequest, NextResponse } from 'next/server'; // ✅ 1. Importamos NextRequest
 import React from 'react';
 import { renderToStream, Document } from '@react-pdf/renderer';
 import { FacturaPDF } from '@/components/pdf/FacturaPDF';
 import { FullInvoiceData } from '@/types';
 import db from '@/lib/db';
 
+// ✅ 2. Actualizamos la firma de la función GET
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
-    const facturaId = parseInt(params.id);
+    const { id: facturaIdString } = context.params;
+    const facturaId = parseInt(facturaIdString);
     const facturaRes = await db.query('SELECT * FROM facturas WHERE id = $1', [facturaId]);
     if (facturaRes.rows.length === 0) {
       return NextResponse.json({ error: 'Factura no encontrada' }, { status: 404 });
@@ -37,6 +39,7 @@ export async function GET(
       chunks.push(Buffer.from(chunk));
     }
     const pdfBuffer = Buffer.concat(chunks);
+    
     return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
