@@ -108,6 +108,12 @@ export interface ChatComponentState {
   isLoading: boolean;
   lastInvoiceId: number | null;
 }
+export interface DraftFactura {
+  cliente: Cliente | null;
+  items: ItemFactura[];
+  metodoPago?: string;
+  cuotas?: number;
+}
 
 
 // 4. DATOS COMPUESTOS Y UTILITARIOS

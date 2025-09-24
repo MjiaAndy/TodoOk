@@ -53,6 +53,7 @@ export function UserInput({ chatState, onAction, clientes, productos }: UserInpu
           <Button onClick={() => {
             const producto = productos.find(p => p.id === parseInt(selectedProductId));
             if (producto) onAction({ type: 'PRODUCT_ADDED', payload: producto });
+            setSelectedProductId('');
           }}>Añadir</Button>
           <Button onClick={() => onAction({ type: 'FINISH_ADDING_PRODUCTS' })} variant="secondary">Continuar</Button>
         </div>

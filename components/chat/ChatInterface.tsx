@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { ChatMessage } from './ChatMessage';
 import { UserInput } from './UserInput';
-import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, ItemFactura } from '@/types';
+import { ChatMessage as ChatMessageType, ChatState, Cliente, Producto, ItemFactura, DraftFactura } from '@/types';
 import {ChatInterfaceProps} from '@/types'
 import { Loader2 } from 'lucide-react';
 
@@ -25,7 +25,7 @@ const getInitialMessages = (): ChatMessageType[] => [
 export function ChatInterface({ initialClientes, initialProductos }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessageType[]>(getInitialMessages);
   const [chatState, setChatState] = useState<ChatState>('SELECTING_CLIENT');
-  const [factura, setFactura] = useState<{ cliente: Cliente | null; items: ItemFactura[] }>({
+  const [factura, setFactura] = useState<DraftFactura>({
     cliente: null,
     items: [],
   });
@@ -60,7 +60,7 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         setChatState('ADDING_PRODUCTS');
         break;
 
-      case 'PRODUCT_ADDED':
+      case 'PRODUCT_ADDED':{
         const producto = action.payload as Producto;
         const itemExistente = factura.items.find(item => item.id === producto.id);
         if (itemExistente) {
@@ -73,8 +73,8 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         addMessage('user', `Añadir: ${producto.nombre}`);
         addMessage('bot', 'Producto añadido. Puedes agregar más o hacer clic en "Continuar".');
         break;
-
-      case 'FINISH_ADDING_PRODUCTS':
+      }
+      case 'FINISH_ADDING_PRODUCTS':{
         if (factura.items.length === 0) {
           toast.error("Debes agregar al menos un producto.");
           return;
@@ -83,8 +83,8 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         addMessage('bot', `¡Genial! El subtotal es $${subtotal.toFixed(2)}. ¿Deseas aplicar algún descuento?`);
         setChatState('ASKING_DISCOUNT');
         break;
-      
-      case 'ANSWER_DISCOUNT':
+      }
+      case 'ANSWER_DISCOUNT': {
         if (action.payload === true) {
           addMessage('user', 'Sí, aplicar descuento.');
           addMessage('bot', 'Por favor, ingresa el porcentaje de descuento.');
@@ -95,8 +95,8 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
           setChatState('SELECTING_PAYMENT');
         }
         break;
-
-      case 'SET_DISCOUNT':
+      }
+      case 'SET_DISCOUNT': {
         const desc = parseFloat(action.payload);
         if (!isNaN(desc) && desc > 0) {
           setDescuento(desc);
@@ -107,8 +107,8 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         }
         setChatState('SELECTING_PAYMENT');
         break;
-
-      case 'SET_PAYMENT':
+      }
+      case 'SET_PAYMENT': {
         const metodoPago = action.payload as string;
         setFactura(prev => ({ ...prev, metodoPago }));
         addMessage('user', `Método de pago: ${metodoPago}.`);
@@ -120,24 +120,24 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
           setChatState('REVIEWING_INVOICE');
         }
         break;
-
-      case 'SET_INSTALLMENTS':
+      }
+      case 'SET_INSTALLMENTS':{
         const cuotas = parseInt(action.payload);
         setFactura(prev => ({ ...prev, cuotas }));
         addMessage('user', `${cuotas} cuota(s).`);
         addMessage('bot', '¡Todo listo! Aquí está el resumen final de la factura. ¿Confirmas?');
         setChatState('REVIEWING_INVOICE');
         break;
-
-      case 'CONFIRM_INVOICE':
+      }
+      case 'CONFIRM_INVOICE':{
         setIsLoading(true);
         addMessage('user', 'Sí, generar la factura.');
         await toast.promise(
           axios.post('/api/facturas', {
             cliente_id: factura.cliente?.id,
             productos_vendidos: factura.items.map(item => ({ id: item.id, cantidad: item.cantidad })),
-            impuesto: 21,
-            descuento: 0,
+            impuesto: montoIVA,
+            descuento: montoDescuento,
           }),
           {
              loading: 'Procesando factura...',
@@ -156,20 +156,21 @@ export function ChatInterface({ initialClientes, initialProductos }: ChatInterfa
         );
         setIsLoading(false);
         break;
-      
-      case 'DOWNLOAD_PDF':
+      }
+      case 'DOWNLOAD_PDF': {
         if (lastInvoiceId) {
           window.open(`/api/facturas/${lastInvoiceId}/pdf`, '_blank');
         }
         break;
-
-      case 'RESET':
+      }
+      case 'RESET': {
         setMessages(getInitialMessages);
         setChatState('SELECTING_CLIENT');
         setDescuento(0);
         setLastInvoiceId(null);
-        setFactura({ cliente: null, items: [] });
+        setFactura({ cliente: null, items: [], metodoPago: undefined, cuotas: undefined });
         break;
+      }
     }
   };
 
